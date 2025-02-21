@@ -3,10 +3,16 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+    origin: ['http://localhost:3000', 'https://bajaj-financ-assingmen.netlify.app'], // Add your deployed frontend URL later
+    methods: ['GET', 'POST'], // Allow only GET and POST methods
+    allowedHeaders: ['Content-Type'], // Allow Content-Type header
+    optionsSuccessStatus: 200 // For legacy browser support
+  };
+  
+app.use(cors(corsOptions));
 app.use(express.json());
 
-// POST endpoint
 app.post('/bfhl', (req, res) => {
     try {
         const { data } = req.body;
@@ -18,11 +24,9 @@ app.post('/bfhl', (req, res) => {
             });
         }
 
-        // Separate numbers and alphabets
         const numbers = data.filter(item => !isNaN(item) && item !== '');
         const alphabets = data.filter(item => /^[a-zA-Z]$/.test(item));
         
-        // Find highest alphabet (case insensitive)
         const highest_alphabet = alphabets.length > 0 ? 
             [alphabets.sort((a, b) => b.toLowerCase().localeCompare(a.toLowerCase()))[0]] : [];
 
@@ -46,11 +50,11 @@ app.post('/bfhl', (req, res) => {
 // GET endpoint
 app.get('/bfhl', (req, res) => {
     res.status(200).json({
-        operation_code: 1
+        "message":"Welcome to backend"
     });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
